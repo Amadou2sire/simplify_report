@@ -93,7 +93,13 @@ def process_project_reports(client: RedmineClient):
                 "status": "Effectué" if is_effected else "Non effectué",
                 "is_effected": is_effected,
                 "real_status": issue.get("status", {}).get("name", "Inconnu"),
-                "tracker": issue.get("tracker", {}).get("name", "Inconnu")
+                "tracker": issue.get("tracker", {}).get("name", "Inconnu"),
+                # Simulated KPIs for the High Fidelity Report
+                "metrics": {
+                    "resolution_time": "2.3 jours",
+                    "satisfaction": "94.2%",
+                    "new_this_month": 12
+                }
             })
             
         return reports

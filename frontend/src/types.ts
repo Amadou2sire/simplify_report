@@ -5,7 +5,7 @@ export interface Ticket {
   subject: string;
   tracker: string;
   type: 'Bug' | 'Performance' | 'Maintenance' | 'Sécurité';
-  status: 'Résolu' | 'En cours' | 'Clôturé' | 'Test' | 'Bloqué' | 'Validation' | 'Ouvert' | 'Nouveau' | 'Inconnu';
+  status: 'Résolu' | 'En cours' | 'Clôturé' | 'Test' | 'Bloqué' | 'Validation' | 'Ouvert' | 'Nouveau' | 'Fermé' | 'En cours de traitement' | 'Annulé' | 'Rejeté' | 'Inconnu' | string;
   date: string;
   priority: 'Critique' | 'Majeure' | 'Mineure';
 }

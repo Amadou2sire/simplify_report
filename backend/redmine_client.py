@@ -20,7 +20,7 @@ class RedmineClient:
         params = {"limit": 100, "offset": 0, **(extra_params or {})}
         results = []
         while True:
-            response = requests.get(url, headers=self.headers, params=params, timeout=10)
+            response = requests.get(url, headers=self.headers, params=params, timeout=30)
             response.raise_for_status()
             data = response.json()
             items = data.get(key, [])
@@ -94,6 +94,6 @@ class RedmineClient:
 
     def get_trackers(self):
         url = f"{self.base_url}/trackers.json"
-        response = requests.get(url, headers=self.headers, timeout=10)
+        response = requests.get(url, headers=self.headers, timeout=30)
         response.raise_for_status()
         return response.json().get("trackers", [])
