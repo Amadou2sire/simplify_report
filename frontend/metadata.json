@@ -1,0 +1,5 @@
+{
+  "name": "Maintenance Activity Report",
+  "description": "A comprehensive dashboard for tracking maintenance tickets, resolution times, and system health.",
+  "requestFramePermissions": []
+}

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Rapport d'Activité — {{ project_name }}</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          primary: '#137fec',
+          secondary: '#f9a825',
+          critique: '#ef4444',
+          majeure: '#f97316',
+          mineure: '#22c55e',
+          maintenance: '#3b82f6',
+          performance: '#f59e0b',
+          bug: '#ef4444',
+          securite: '#ec4899'
+        },
+        fontFamily: { sans: ['Inter', 'sans-serif'] },
+        borderRadius: { 'custom': '8px' }
+      }
+    }
+  }
+</script>
+<style>
+  body { background-color: #f8fafc; font-family: 'Inter', sans-serif; }
+  .progress-bar-container { height: 8px; background-color: #e2e8f0; border-radius: 4px; overflow: hidden; }
+  @media print { body { background-color: white; } }
+</style>
+</head>
+<body class="p-4 md:p-8 text-slate-800">
+<div class="max-w-6xl mx-auto space-y-8">
+
+  <!-- Header -->
+  <header class="flex flex-col md:flex-row justify-between items-start md:items-center border-b pb-6 gap-4">
+    <div class="space-y-2">
+      <img alt="Medianet Logo" class="h-8 object-contain"
+           src="https://lh3.googleusercontent.com/aida-public/AB6AXuCLhisbROTajkIR5oYgSRii7wxkJuR7YA3VoR90MwVad24uQno8X6KswrZNBjbZqs5wpCwSrK7CEpUfaRvFsU2_X86hGqABy28zTTMOJp5dsYjAw8hWFYAVTT8jMhmDCu5QTLU7rAaYlxUq77KDsze6JAq87FGyCmF9hzJi8GkNnKssI6WjjI6C4Dz_xNfuXHpTWg85G5im26dqK4An2O4gD14wdOdvnkrqdNHp7aFT6VfpfckB3HS27dQfjEmMe7XFKMaRIFrLF0A"/>
+      <div>
+        <h1 class="text-2xl font-bold flex items-center gap-2">
+          <span class="w-1 h-8 bg-primary block rounded-full"></span>
+          Rapport d'Activité de Maintenance
+        </h1>
+        <p class="text-slate-500 ml-3">{{ project_name }}</p>
+      </div>
+    </div>
+    <div class="text-right">
+      <p class="text-sm font-semibold text-slate-500">Période du rapport</p>
+      <p class="text-lg font-bold">{{ date_from }} — {{ date_to }}</p>
+      <p class="text-xs text-slate-400">Généré le {{ generated_at }}</p>
+    </div>
+  </header>
+
+  <!-- Overview Cards -->
+  <section>
+    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+      <span class="w-1 h-4 bg-primary rounded-full"></span>
+      Vue d'ensemble des tickets
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div class="bg-indigo-600 text-white p-6 rounded-custom shadow-lg relative overflow-hidden">
+        <p class="text-sm opacity-80">Total des tickets</p>
+        <p class="text-3xl font-bold mt-1">{{ total_tickets }}</p>
+        <p class="text-xs mt-4 opacity-70">Sur la période sélectionnée</p>
+      </div>
+      <div class="bg-emerald-500 text-white p-6 rounded-custom shadow-lg">
+        <p class="text-sm opacity-80">Tickets résolus</p>
+        <p class="text-3xl font-bold mt-1">{{ resolved_tickets }}</p>
+        <p class="text-xs mt-4 opacity-70">Statut : Résolu / Clôturé</p>
+      </div>
+      <div class="bg-orange-500 text-white p-6 rounded-custom shadow-lg">
+        <p class="text-sm opacity-80">En cours</p>
+        <p class="text-3xl font-bold mt-1">{{ in_progress_tickets }}</p>
+        <p class="text-xs mt-4 opacity-70">Statut : En cours / Ouvert</p>
+      </div>
+      <div class="bg-purple-600 text-white p-6 rounded-custom shadow-lg">
+        <p class="text-sm opacity-80">Taux de résolution</p>
+        <p class="text-3xl font-bold mt-1">{{ resolution_rate }}%</p>
+        <p class="text-xs mt-4 opacity-70">Résolu / Total</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Tickets Table -->
+  <section>
+    <h2 class="text-lg font-bold mb-4 flex items-center gap-2">
+      <span class="w-1 h-4 bg-purple-600 rounded-full"></span>
+      Liste détaillée des tickets
+    </h2>
+    <div class="bg-white rounded-custom border border-slate-200 shadow-sm overflow-hidden">
+      <div class="p-4 border-b border-slate-100 flex justify-between items-center">
+        <div>
+          <h3 class="font-bold text-slate-700">Tickets de la période</h3>
+          <p class="text-xs text-slate-400">Ouverts entre {{ date_from }} et {{ date_to }}</p>
+        </div>
+        <p class="text-[10px] text-slate-400 font-medium">{{ total_tickets }} ticket(s)</p>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-sm">
+          <thead class="bg-slate-50 text-slate-500 uppercase text-[10px] tracking-wider font-semibold border-b border-slate-100">
+            <tr>
+              <th class="px-4 py-3">ID</th>
+              <th class="px-4 py-3">Titre</th>
+              <th class="px-4 py-3">Tracker</th>
+              <th class="px-4 py-3">Statut</th>
+              <th class="px-4 py-3">Date ouverture</th>
+              <th class="px-4 py-3">Échéance</th>
+              <th class="px-4 py-3">Priorité</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-slate-100">
+            {% for ticket in tickets %}
+            <tr class="hover:bg-slate-50/50">
+              <td class="px-4 py-3 font-medium text-primary">#{{ ticket.id }}</td>
+              <td class="px-4 py-3 font-medium text-slate-700">{{ ticket.subject }}</td>
+              <td class="px-4 py-3">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-100 text-blue-700">
+                  {{ ticket.tracker }}
+                </span>
+              </td>
+              <td class="px-4 py-3">
+                <span class="px-2 py-0.5 rounded-full text-[10px] font-bold
+                  {% if ticket.status in ['Résolu', 'Clôturé', 'Fermé'] %}bg-emerald-100 text-emerald-700
+                  {% elif ticket.status == 'Bloqué' %}bg-red-100 text-red-700
+                  {% elif ticket.status == 'En cours' %}bg-amber-100 text-amber-700
+                  {% else %}bg-blue-100 text-blue-700{% endif %}">
+                  {{ ticket.status }}
+                </span>
+              </td>
+              <td class="px-4 py-3 text-slate-500 text-xs">{{ ticket.created_on }}</td>
+              <td class="px-4 py-3 text-slate-500 text-xs">{{ ticket.due_date or '—' }}</td>
+              <td class="px-4 py-3">
+                <span class="px-2 py-0.5 rounded text-[10px] font-bold text-white
+                  {% if ticket.priority == 'Critique' or ticket.priority == 'Urgente' %}bg-red-500
+                  {% elif ticket.priority == 'Haute' or ticket.priority == 'Majeure' %}bg-orange-500
+                  {% else %}bg-emerald-500{% endif %}">
+                  {{ ticket.priority }}
+                </span>
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="7" class="px-4 py-8 text-center text-slate-400 text-sm">
+                Aucun ticket trouvé sur cette période.
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="flex justify-between items-center pt-8 border-t text-[10px] text-slate-400">
+    <div class="flex items-center gap-2">
+      <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"/>
+      </svg>
+      Rapport généré automatiquement — Redmine API
+    </div>
+    <div>© 2026 Medianet — Tous droits réservés</div>
+  </footer>
+
+</div>
+</body>
+</html>
