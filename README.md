@@ -46,7 +46,7 @@ cd backend
 
 # (Première fois uniquement) Créer le venv et installer les dépendances
 python -m venv venv
-.\venv\Scripts\pip install fastapi uvicorn requests python-dotenv pandas
+pip3 install -r requirements.txt
 
 # Configurer les accès Redmine
 # Éditer le fichier backend/.env :
